@@ -40,7 +40,7 @@ def private_write(path: Path, value: str) -> None:
     private_dir(path.parent)
     temp = path.with_name(path.name + "." + secrets.token_hex(8) + ".tmp")
     try:
-        with temp.open("x", encoding="utf-8", opener=lambda name, flags: os.open(name, flags, 0o600)) as handle:
+        with os.fdopen(os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w", encoding="utf-8") as handle:
             handle.write(value)
         os.replace(temp, path)
         try:
@@ -61,7 +61,7 @@ def get_pairing_key() -> str:
     token = secrets.token_urlsafe(32)
     # Exclusive creation avoids accidental overwrite.
     try:
-        with KEY_FILE.open("x", encoding="utf-8", opener=lambda name, flags: os.open(name, flags, 0o600)) as handle:
+        with os.fdopen(os.open(KEY_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w", encoding="utf-8") as handle:
             handle.write(token + "\n")
     except FileExistsError:
         return get_pairing_key()

@@ -13,6 +13,7 @@
   input[readonly] { background: #e2e8f0; }
   button { margin-top: 14px; width: 100%; border: 0; padding: 10px; border-radius: 6px; background: #164e63; color: white; font-weight: 650; cursor: pointer; }
   button:disabled { opacity: .5; cursor: not-allowed; }
+  button.secondary { background: #334155; margin-top: 8px; }
   #status { min-height: 24px; margin-top: 10px; white-space: pre-wrap; }
 </style>
 </head>
@@ -26,6 +27,7 @@
 <input id="title" maxlength="256" placeholder="Book title (optional)">
 <label for="author">Author</label>
 <input id="author" maxlength="256" placeholder="Author (optional)">
+<button id="detect" type="button" class="secondary">Read visible title / author</button>
 <label for="key">Local pairing key</label>
 <input id="key" type="password" autocomplete="off" placeholder="From Python server" required>
 <button id="send" type="submit">Send to local Python</button>

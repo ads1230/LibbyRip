@@ -33,8 +33,16 @@ python3 tools/libby_handoff_server.py --list
 python3 tools/libby_handoff_server.py --show-pairing-key
 python3 tools/libby_handoff_server.py --watch-official
 python3 tools/official_epub_handoff.py --latest
-python3 -m unittest discover -s tests -p 'test*handoff*.py' -v
+python3 tools/loan_catalog.py --list
+python3 tools/loan_catalog.py --scan ~/Downloads
+python3 tools/loan_catalog.py --link ~/Downloads/your-loan.acsm --loan https://libbyapp.com/open/loan/123/456
+python3 tools/loan_catalog.py --open --dry-run --loan https://libbyapp.com/open/loan/123/456
+python3 -m unittest discover -s tests -p 'test*.py' -v
 ```
+
+### Explicit loan-to-file association
+
+Python can now track which official ACSM belongs to a particular loan, **but only after you explicitly link the file** using `tools/loan_catalog.py --link FILE --loan URL`. It will never guess based on filenames, automatically bind an unverified file, or download content itself. `--list` shows `awaiting_official_acsm`, `official_acsm_linked`, or `linked_file_missing_or_changed`. `--scan DIRECTORY` lists candidate ACSM files without changing your records. `--open --loan URL` verifies the file hash before opening it in Adobe Digital Editions; add `--dry-run` for a safe check. Use `--replace` to change an existing association, or `--unlink --loan URL` to forget it without deleting files. Metadata and associations are stored privately on this Mac. This is a conservative identity check, not a claim that the ACSM file genuinely belongs to the loan—only the user can verify that from the official download flow.
 
 For `--watch-official`, select Libby's supported EPUB download option manually when eligible. Your browser downloads an ACSM licence file, and Adobe Digital Editions fulfils it. ADE requires appropriate authorisation and loans retain their access restrictions.
 

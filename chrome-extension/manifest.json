@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Libby → Python Handoff",
+  "description": "Consent-based Libby loan metadata handoff to local Python. Optional read-only title detection.",
+  "version": "0.2.0",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8765/*"
+  ],
+  "action": {
+    "default_title": "Send Libby loan details",
+    "default_popup": "popup.html"
+  }
+}

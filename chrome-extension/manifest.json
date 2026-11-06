@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Libby → Python Handoff",
-  "description": "Send visible Libby loan details to a local Python helper, on explicit user action. No reading-page injection.",
-  "version": "0.1.0",
+  "description": "Consent-based Libby loan metadata handoff to local Python. Optional read-only title detection.",
+  "version": "0.2.0",
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "scripting"
   ],
   "host_permissions": [
     "http://127.0.0.1:8765/*"

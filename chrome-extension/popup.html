@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Libby to Python</title>
+<style>
+  body { width: 330px; margin: 0; padding: 16px; background: #f8fafc; color: #0f172a; font: 14px/1.4 system-ui, sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 12px; color: #475569; }
+  label { display: block; font-weight: 600; margin: 10px 0 4px; }
+  input { width: 100%; box-sizing: border-box; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px; font: inherit; background: white; color: #0f172a; }
+  input[readonly] { background: #e2e8f0; }
+  button { margin-top: 14px; width: 100%; border: 0; padding: 10px; border-radius: 6px; background: #164e63; color: white; font-weight: 650; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  #status { min-height: 24px; margin-top: 10px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Libby → Python handoff</h1>
+<p>Send this loan's URL and the details you review to your local Mac. No cookies, credentials, or book pages are transferred.</p>
+<form id="sendForm">
+<label for="url">Loan URL</label>
+<input id="url" readonly required>
+<label for="title">Book title</label>
+<input id="title" maxlength="256" placeholder="Book title (optional)">
+<label for="author">Author</label>
+<input id="author" maxlength="256" placeholder="Author (optional)">
+<label for="key">Local pairing key</label>
+<input id="key" type="password" autocomplete="off" placeholder="From Python server" required>
+<button id="send" type="submit">Send to local Python</button>
+</form>
+<div id="status" role="status" aria-live="polite"></div>
+<script src="popup.js"></script>
+</body>
+</html>

@@ -5,9 +5,12 @@ on:
     paths:
       - 'tools/libby_handoff_server.py'
       - 'tools/official_epub_handoff.py'
+      - 'tools/loan_catalog.py'
       - 'chrome-extension/**'
       - 'tests/test_libby_handoff.py'
       - 'tests/test_handoff_http.py'
+      - 'tests/test_official_handoff.py'
+      - 'tests/test_loan_catalog.py'
       - '.github/workflows/libby-handoff-tests.yml'
   push:
     branches:
@@ -27,10 +30,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Compile Python files
-        run: python -m compileall -q tools/libby_handoff_server.py tools/official_epub_handoff.py tests/
+        run: python -m compileall -q tools/libby_handoff_server.py tools/official_epub_handoff.py tools/loan_catalog.py tests/
       - name: Check Chrome manifest and JavaScript syntax
         run: |
           node -e "const m=require('./chrome-extension/manifest.json'); if(m.manifest_version!==3||!m.permissions.includes('activeTab')||!m.permissions.includes('scripting'))process.exit(1)"
           node --check chrome-extension/popup.js
       - name: Unit and HTTP integration tests (loopback only)
-        run: python -m unittest discover -s tests -p 'test*handoff*.py' -v
+        run: python -m unittest discover -s tests -p 'test*.py' -v

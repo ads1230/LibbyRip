@@ -2,7 +2,7 @@
 
 This branch adds a **separate, intentionally limited** Chrome-to-Python bridge:
 
-- `chrome-extension/` provides a small Chrome extension popup that reads **only the active tab's URL and browser title**. You can edit the title and author before clicking **Send**.
+- `chrome-extension/` provides a small Chrome extension popup that reads **only the active tab's URL and browser title** by default. An optional **Read visible title / author** button extracts standard metadata and visible headings when clicked. You can review/edit both fields before **Send**.
 - `tools/libby_handoff_server.py` receives that metadata on **127.0.0.1:8765**, validates the loan URL, and stores it in `~/.local/share/libby-handoff/loans.json`.
 - `tools/official_epub_handoff.py` (inherited from the previous branch) optionally watches for **official** ACSM loan downloads and opens them in Adobe Digital Editions.
 
@@ -23,7 +23,7 @@ A small local setup is unavoidable because GitHub cannot install a Chrome extens
 3. In Chrome open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the downloaded `chrome-extension` folder.
 4. Turn off original and experimental LibreGRAB userscripts in Tampermonkey.
 5. Open your borrowed title's normal Libby loan page at `https://libbyapp.com/open/loan/...`.
-6. Click the **Libby → Python Handoff** Chrome extension icon. Review the URL/title, optionally add the author, paste the pairing key and click **Send to local Python**.
+6. Click the **Libby → Python Handoff** Chrome extension icon. Optionally click **Read visible title / author** to populate the fields (read-only extraction from the visible page, no reader iframe access). Review/edit the URL/title/author, paste the pairing key and click **Send to local Python**.
 7. Return to Terminal to see the receipt; no chapter content will be fetched.
 
 ### Commands
@@ -33,7 +33,7 @@ python3 tools/libby_handoff_server.py --list
 python3 tools/libby_handoff_server.py --show-pairing-key
 python3 tools/libby_handoff_server.py --watch-official
 python3 tools/official_epub_handoff.py --latest
-python3 -m unittest discover -s tests -p 'test_libby_handoff.py' -v
+python3 -m unittest discover -s tests -p 'test*handoff*.py' -v
 ```
 
 For `--watch-official`, select Libby's supported EPUB download option manually when eligible. Your browser downloads an ACSM licence file, and Adobe Digital Editions fulfils it. ADE requires appropriate authorisation and loans retain their access restrictions.
@@ -43,6 +43,8 @@ For `--watch-official`, select Libby's supported EPUB download option manually w
 - Chrome sends a URL **without query string or fragment**, plus manually reviewed title and author.
 - The server rejects non-Libby loan URLs, requires a per-install pairing key, only accepts `chrome-extension://` origins and limits request size.
 - The pairing key is stored in Chrome's **local** extension storage, not Chrome sync. Keep it private.
+- The optional metadata reader is initiated only by clicking a button, uses Chrome's temporary `activeTab` permission, and does not inspect cookies, account storage, or embedded chapter iframes.
+- GitHub Actions validates Python syntax, JavaScript syntax, and localhost-only HTTP tests. The workflow must run and pass before this can be described as CI-verified.
 - The receiver stores loan metadata only, with restricted local file permissions on macOS/POSIX.
 - This is a local development tool and not a hardened, audited security service. Do not expose the port to your network or internet.
 - To clear loan records, stop the service and delete `~/.local/share/libby-handoff/loans.json`.
@@ -52,4 +54,4 @@ For `--watch-official`, select Libby's supported EPUB download option manually w
 
 The publisher may restrict a library account regardless of how an export is attempted. Merely using Python instead of JavaScript does not create a guaranteed safe route for automated content retrieval. This extension does not attempt to circumvent those controls.
 
-**Current state:** Static code and unit tests are provided; end-to-end Chrome/ADE testing has not been performed. The main LibreGRAB script is unchanged.
+**Current state:** Static code, offline unit/HTTP integration tests, and a GitHub Actions workflow are provided; end-to-end Chrome/ADE testing has not been performed. The main LibreGRAB script is unchanged.

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Libby → Python Handoff",
+  "description": "Send visible Libby loan details to a local Python helper, on explicit user action. No reading-page injection.",
+  "version": "0.1.0",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8765/*"
+  ],
+  "action": {
+    "default_title": "Send Libby loan details",
+    "default_popup": "popup.html"
+  }
+}

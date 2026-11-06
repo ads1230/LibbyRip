@@ -1,0 +1,36 @@
+name: Libby handoff offline tests
+
+on:
+  pull_request:
+    paths:
+      - 'tools/libby_handoff_server.py'
+      - 'tools/official_epub_handoff.py'
+      - 'chrome-extension/**'
+      - 'tests/test_libby_handoff.py'
+      - 'tests/test_handoff_http.py'
+      - '.github/workflows/libby-handoff-tests.yml'
+  push:
+    branches:
+      - feature/libby-python-handoff
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile Python files
+        run: python -m compileall -q tools/libby_handoff_server.py tools/official_epub_handoff.py tests/
+      - name: Check Chrome manifest and JavaScript syntax
+        run: |
+          node -e "const m=require('./chrome-extension/manifest.json'); if(m.manifest_version!==3||!m.permissions.includes('activeTab')||!m.permissions.includes('scripting'))process.exit(1)"
+          node --check chrome-extension/popup.js
+      - name: Unit and HTTP integration tests (loopback only)
+        run: python -m unittest discover -s tests -p 'test*handoff*.py' -v

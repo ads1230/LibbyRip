@@ -10,8 +10,6 @@
 // @match         *://*.read.libbyapp.com/*
 // @match         *://read.overdrive.com/*
 // @match         *://*.read.overdrive.com/*
-// @match         *://*.listen.libbyapp.com/*
-// @match         *://*.listen.overdrive.com/*
 // @run-at        document-start
 // @icon          https://www.google.com/s2/favicons?sz=64&domain=libbyapp.com
 // @grant         none
